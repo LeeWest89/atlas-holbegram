@@ -2,11 +2,15 @@ import { StatusBar } from "expo-status-bar";
 import { Image ,Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { Colors } from "./Colors";
+import { LogoutIcon } from "../components/logout";
 import { UploadIcon } from "../components/upload";
 import BottomBar from "../components/bottomBar";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { AddPostScreenNavigationProp } from '../../types';
 
 export default function AddPost() {
+  const navigation = useNavigation<AddPostScreenNavigationProp>();
   const [pickedImage, setPickedImage] = useState(null);
 
   const handleUploadPress = async () => {
@@ -29,12 +33,16 @@ export default function AddPost() {
     }
   };
 
+  const handleLogoutPress = () => {
+    navigation.navigate('Login');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.text}>Add Post</Text>
-        <Pressable onPress={handleUploadPress}>
-          <UploadIcon />
+        <Pressable onPress={handleLogoutPress}>
+          <LogoutIcon />
         </Pressable>
       </View>
 
@@ -42,7 +50,10 @@ export default function AddPost() {
         {pickedImage ? (
           <Image source={{ uri: pickedImage }} style={styles.placeholderSquare} />
         ) : (
-          <View style={styles.placeholderSquare} />
+          <Pressable onPress={handleUploadPress} style={styles.placeholderSquare}>
+            <UploadIcon />
+          </Pressable>
+
         )}
 
         <TextInput 
@@ -151,5 +162,7 @@ const styles = StyleSheet.create({
     height: 325,
     marginBottom: 30,
     borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
