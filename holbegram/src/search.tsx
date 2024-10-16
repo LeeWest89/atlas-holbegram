@@ -1,14 +1,15 @@
 import { StatusBar } from "expo-status-bar";
-import { Image ,Pressable, StyleSheet, ScrollView, Text, TextInput, View } from "react-native";
+import { Image ,Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import { Colors } from "./Colors";
 import { LogoutIcon } from "../components/logout";
 import BottomBar from "../components/bottomBar";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { FavoritesScreenNavigationProp } from '../../types';
+import { SearchScreenNavigationProp } from '../../types';
 
-export default function Favorites() {
-  const navigation = useNavigation<FavoritesScreenNavigationProp>();
+export default function Search() {
+  const navigation = useNavigation<SearchScreenNavigationProp>();
 
   const handleLogoutPress = () => {
     navigation.navigate('Login');
@@ -17,24 +18,17 @@ export default function Favorites() {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.text}>Favorites</Text>
+        <Text style={styles.text}>Search</Text>
         <Pressable onPress={handleLogoutPress}>
           <LogoutIcon />
         </Pressable>
       </View>
 
-      <ScrollView>
-        <View style={styles.placeholderSquare}></View>
-        <View style={styles.placeholderSquare}></View>
-        <View style={styles.placeholderSquare}></View>
-      </ScrollView>
-
       <BottomBar />
     </View>
   );
-}
+};
 
-// Styles Go Here
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -57,15 +51,5 @@ const styles = StyleSheet.create({
   text: {
     color: "#000",
     fontSize: 25,
-  },
-
-  placeholderSquare: {
-    width: 410,
-    height: 410,
-    marginBottom: 10,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#DC143C",
   },
 });

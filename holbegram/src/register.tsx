@@ -40,7 +40,7 @@ export default function Register() {
 
       <Pressable
       style={styles.button}
-      onPress={() => navigation.navigate('AddPost')}
+      onPress={() => navigation.navigate('Home')}
       >
         <Text style={styles.buttonText}>Create Account</Text>
       </Pressable>
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 40,
   },
   text: {
     color: "#fff",
