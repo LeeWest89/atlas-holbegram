@@ -1,25 +1,25 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "./Colors";
 
-export default function Main() {
+export default function AddPost() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hello Lee</Text>
+      <Text style={styles.text}>Add Post</Text>
     </View>
   );
 }
 
-//Styles Go Here
+// Styles Go Here
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.blue,
-    color: "#fff",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
-    color: Colors.yellow,
+    color: "#000",
+    fontSize: 25,
   },
 });
