@@ -6,6 +6,7 @@ import Home from './holbegram/src/home';
 import Favorites from './holbegram/src/favorites';
 import Profile from './holbegram/src/profile';
 import Search from './holbegram/src/search';
+import EditProfile from './holbegram/src/editProfile';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -58,14 +59,22 @@ export default function App() {
         </Stack.Screen>
 
         <Stack.Screen 
-          name='Profile' 
-          component={Profile} 
+          name='Profile'  
           options={{ headerShown: false }}
-        />
+        >
+          {() => <Profile user={user} />}
+        </Stack.Screen>
 
         <Stack.Screen
         name='Search'
         component={Search}
+        options={{ headerShown: false }}
+        />
+
+        
+        <Stack.Screen
+        name='EditProfile'
+        component={EditProfile}
         options={{ headerShown: false }}
         />
       </Stack.Navigator>

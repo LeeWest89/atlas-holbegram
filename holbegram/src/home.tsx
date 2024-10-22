@@ -99,7 +99,7 @@ export default function Home({ user }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E0E0E0",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     paddingLeft: "10%",
     paddingRight: "10%",
     paddingVertical: 10,
+    backgroundColor: "#fff",
   },
 
   text: {

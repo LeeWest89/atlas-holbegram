@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, ScrollView, Text, TextInput, View } from "react-native";
+import { Image ,Pressable, StyleSheet, ScrollView, Text, TextInput, View } from "react-native";
 import { Colors } from "./Colors";
 import { LogoutIcon } from "../components/logout";
 import BottomBar from "../components/bottomBar";
@@ -8,58 +8,23 @@ import { ProfileScreenNavigationProp } from '../../types';
 import { handleLogoutPress } from "./util";
 import { createdCaptions } from "../lib/firestore";
 
-export default function Profile({ user }) {
+export default function EditProfile() {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-  const [captions, setCaptions] = useState<any[]>([]);
 
-  useEffect(() => {
-    const userId = user?.uid;
-    if (userId) {
-      const unsubscribe = createdCaptions(userId, (data) => {
-        setCaptions(data);
-      });
 
-      return () => unsubscribe();
-    }
-  }, [user]);
-
-  const firstImageUrl = captions.length > 0 ? captions[0].imageUrl : null;
-
-  const handleProfilePress = () => {
-    navigation.navigate("EditProfile");
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.text}>Profile</Text>
+        <Text style={styles.text}>Edit Profile</Text>
         <Pressable onPress={() => handleLogoutPress(navigation)}>
           <LogoutIcon />
         </Pressable>
       </View>
 
-      <Pressable onPress={handleProfilePress}>
-        {firstImageUrl ? (
-          <Image source={{ uri: firstImageUrl }} style={styles.placeholderProfile} />
-        ) : (
-          <View style={styles.placeholderProfile} />
-        )}
-      </Pressable>
-
-      <Text style={styles.nameText}>{user?.email || 'User Name'}</Text>
-
-      <ScrollView>
-        <View style={styles.squaresContainer}>
-          {captions.map((caption) => (
-            <View key={caption.id}>
-              <Image
-                source={{ uri: caption.imageUrl }}
-                style={styles.image}
-              />
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <View>
+        <Text>Edit Profile Screen</Text>
+      </View>
 
       <BottomBar />
     </View>

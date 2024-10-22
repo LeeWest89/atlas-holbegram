@@ -8,6 +8,7 @@ export type RootStackParamList = {
   Favorites: undefined;
   Profile: undefined;
   Search: undefined;
+  EditProfile: undefined;
 };
 
 export type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -17,3 +18,4 @@ export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamL
 export type FavoritesScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Favorites'>;
 export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;
 export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Search'>;
+export type EditProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditProfile'>;
