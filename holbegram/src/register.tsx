@@ -1,15 +1,26 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Colors } from "./Colors";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { RegisterScreenNavigationProp } from '../../types';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../lib/firebaseConfig';
 
 export default function Register() {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const Logo = require('../assets/logo.png');
+
+  const handleRegisteration = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigation.navigate('Home');
+    } catch (error) {
+      Alert.alert('Registration failed');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -40,7 +51,7 @@ export default function Register() {
 
       <Pressable
       style={styles.button}
-      onPress={() => navigation.navigate('Home')}
+      onPress={handleRegisteration}
       >
         <Text style={styles.buttonText}>Create Account</Text>
       </Pressable>
@@ -83,7 +94,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.teal,
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: '#333',
+    color: '#fff',
   },
   button: {
     width: 370,

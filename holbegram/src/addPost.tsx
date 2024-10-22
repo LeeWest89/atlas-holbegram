@@ -8,6 +8,7 @@ import BottomBar from "../components/bottomBar";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AddPostScreenNavigationProp } from '../../types';
+import { handleLogoutPress } from "./util";
 
 export default function AddPost() {
   const navigation = useNavigation<AddPostScreenNavigationProp>();
@@ -33,15 +34,11 @@ export default function AddPost() {
     }
   };
 
-  const handleLogoutPress = () => {
-    navigation.navigate('Login');
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.text}>Add Post</Text>
-        <Pressable onPress={handleLogoutPress}>
+        <Pressable onPress={() => handleLogoutPress(navigation)}>
           <LogoutIcon />
         </Pressable>
       </View>

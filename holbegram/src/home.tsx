@@ -1,24 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import { Image ,Pressable, StyleSheet, ScrollView, Text, TextInput, View } from "react-native";
+import { Image ,Pressable, StyleSheet, ScrollView, Text, TextInput, View, Alert } from "react-native";
 import { Colors } from "./Colors";
 import { LogoutIcon } from "../components/logout";
 import BottomBar from "../components/bottomBar";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from '../../types';
+import { handleLogoutPress } from "./util";
 
 export default function Home() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  const handleLogoutPress = () => {
-    navigation.navigate('Login');
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.text}>Home Feed</Text>
-        <Pressable onPress={handleLogoutPress}>
+        <Pressable onPress={() => handleLogoutPress(navigation)}>
           <LogoutIcon />
         </Pressable>
       </View>

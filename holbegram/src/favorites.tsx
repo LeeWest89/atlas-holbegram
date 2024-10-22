@@ -6,19 +6,16 @@ import BottomBar from "../components/bottomBar";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { FavoritesScreenNavigationProp } from '../../types';
+import { handleLogoutPress } from "./util";
 
 export default function Favorites() {
   const navigation = useNavigation<FavoritesScreenNavigationProp>();
-
-  const handleLogoutPress = () => {
-    navigation.navigate('Login');
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.text}>Favorites</Text>
-        <Pressable onPress={handleLogoutPress}>
+        <Pressable onPress={() => handleLogoutPress(navigation)}>
           <LogoutIcon />
         </Pressable>
       </View>
