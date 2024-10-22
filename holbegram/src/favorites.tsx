@@ -1,15 +1,39 @@
-import { StatusBar } from "expo-status-bar";
 import { Image ,Pressable, StyleSheet, ScrollView, Text, TextInput, View } from "react-native";
-import { Colors } from "./Colors";
 import { LogoutIcon } from "../components/logout";
 import BottomBar from "../components/bottomBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { FavoritesScreenNavigationProp } from '../../types';
 import { handleLogoutPress } from "./util";
+import { completedCaptions } from "../lib/firestore";
 
-export default function Favorites() {
+export default function Favorites({ user }) {
   const navigation = useNavigation<FavoritesScreenNavigationProp>();
+  const [captions, setCaptions] = useState([]);
+  const [activeCaption, setActiveCaption] = useState<string | null>(null);
+
+  useEffect(() => {
+    const userId = user?.uid;
+
+    if (!userId) {
+      console.error("User ID is undefined. Unable to fetch favorites.");
+      return;
+    }
+
+    const unsubscribe = completedCaptions(userId, (data) => {
+      setCaptions(data);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const handleLongPress = (captionText: string) => {
+    setActiveCaption(captionText);
+  };
+
+  const handleRelease = () => {
+    setActiveCaption(null);
+  };
 
   return (
     <View style={styles.container}>
@@ -21,9 +45,25 @@ export default function Favorites() {
       </View>
 
       <ScrollView>
-        <View style={styles.placeholderSquare}></View>
-        <View style={styles.placeholderSquare}></View>
-        <View style={styles.placeholderSquare}></View>
+        {captions.map((caption) => (
+          <Pressable
+            key={caption.id}
+            onLongPress={() => handleLongPress(caption.text)}
+            onPressOut={handleRelease}
+          >
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: caption.imageUrl }}
+                style={styles.imageContainer}
+              />
+              {activeCaption === caption.text && (
+                <View style={styles.captionOverlay}>
+                  <Text style={styles.captionText}>{caption.text}</Text>
+                </View>
+              )}
+            </View>
+          </Pressable>
+        ))}
       </ScrollView>
 
       <BottomBar />
@@ -56,13 +96,29 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
 
-  placeholderSquare: {
+  imageContainer: {
+    position: 'relative',
     width: 410,
     height: 410,
     marginBottom: 10,
     borderRadius: 20,
-    alignItems: 'center',
+  },
+
+  captionOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
-    backgroundColor: "#DC143C",
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+
+  captionText: {
+    color: '#fff',
+    fontSize: 20,
+    textAlign: 'center',
   },
 });

@@ -17,12 +17,16 @@ export default function AddPost() {
   const navigation = useNavigation<AddPostScreenNavigationProp>();
   const [pickedImage, setPickedImage] = useState(null);
   const [newCaption, setNewCaption] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const addCaption = async () => {
     if (!pickedImage) {
       Alert.alert('Please pick an image.')
       return;
     }
+
+    setLoading(true);
+
     try{
       const fileName = pickedImage.split('/').pop();
       const res = await fetch(pickedImage);
@@ -32,6 +36,8 @@ export default function AddPost() {
       navigation.navigate('Home');
     } catch(error) {
       Alert.alert('Failed to add caption.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,8 +91,9 @@ export default function AddPost() {
         <Pressable
           style={styles.button}
           onPress={addCaption}
+          disabled={loading}
         >
-          <Text style={styles.buttonText}>Save</Text>
+          <Text style={styles.buttonText}>{loading ? 'Saving...' : 'Save'}</Text>
         </Pressable>
 
         <Pressable
