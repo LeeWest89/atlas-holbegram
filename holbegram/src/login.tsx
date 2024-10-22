@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Colors } from "./Colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { LoginScreenNavigationProp } from '../../types';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, User } from 'firebase/auth';
 import { auth } from "../lib/firebaseConfig";
+import { useCurrentUser } from "./util";
 
 
 
@@ -16,7 +17,9 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const Logo = require('../assets/logo.png');
 
+
   async function handleLogin() {
+
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in both email and password');
       return;

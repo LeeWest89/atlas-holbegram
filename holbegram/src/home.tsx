@@ -11,11 +11,10 @@ import { handleLogoutPress } from "./util";
 export default function Home() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.text}>Home Feed</Text>
+        <Text style={styles.text}>Home</Text>
         <Pressable onPress={() => handleLogoutPress(navigation)}>
           <LogoutIcon />
         </Pressable>

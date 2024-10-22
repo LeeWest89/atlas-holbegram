@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Image ,Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image ,Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { Colors } from "./Colors";
 import { LogoutIcon } from "../components/logout";
@@ -8,11 +8,32 @@ import BottomBar from "../components/bottomBar";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AddPostScreenNavigationProp } from '../../types';
-import { handleLogoutPress } from "./util";
+import { handleLogoutPress, useCurrentUser } from "./util";
+import { createCaption } from "../lib/firestore";
+import { upload } from "../lib/storage";
 
 export default function AddPost() {
+  const user = useCurrentUser();
   const navigation = useNavigation<AddPostScreenNavigationProp>();
   const [pickedImage, setPickedImage] = useState(null);
+  const [newCaption, setNewCaption] = useState("");
+
+  const addCaption = async () => {
+    if (!pickedImage) {
+      Alert.alert('Please pick an image.')
+      return;
+    }
+    try{
+      const fileName = pickedImage.split('/').pop();
+      const res = await fetch(pickedImage);
+      const file = await res.blob();
+      const imageUrl =await upload(file, fileName)
+      await createCaption(newCaption, user?.uid, imageUrl);
+      navigation.navigate('Home');
+    } catch(error) {
+      Alert.alert('Failed to add caption.');
+    }
+  };
 
   const handleUploadPress = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -57,18 +78,23 @@ export default function AddPost() {
         style={styles.input}
         placeholder="Add a caption"
         placeholderTextColor="#999"
+        value={newCaption}
+        onChangeText={setNewCaption}
         />
 
         <Pressable
           style={styles.button}
-          onPress={() => {}}
+          onPress={addCaption}
         >
           <Text style={styles.buttonText}>Save</Text>
         </Pressable>
 
         <Pressable
           style={styles.resetButton}
-          onPress={() => setPickedImage(null)}
+          onPress={() => {
+            setPickedImage(null);
+            setNewCaption("")
+          }}
         >
           <Text style={styles.resetButtonText}>Reset</Text>
         </Pressable>
