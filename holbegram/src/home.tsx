@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from '../../types';
 import { handleLogoutPress } from "./util";
-import { allCaptions, updateCompleted } from "../lib/firestore";
+import { allCaptions, updateCompleted, addFavorite } from "../lib/firestore";
 
-export default function Home() {
+export default function Home({ user }) {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [captions, setCaptions] = useState([]);
   const [activeCaption, setActiveCaption] = useState<string | null>(null);
@@ -47,6 +47,14 @@ export default function Home() {
     setLastTapTime(currentTime);
   };
 
+  const handleFavorite = (captionId: string) => {
+    const userId = user?.uid;
+    if (userId) {
+      addFavorite(captionId, userId)
+        .catch((error) => console.error("Error adding favorite: ", error));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -62,7 +70,10 @@ export default function Home() {
           key={caption.id}
           onLongPress={() => handleLongPress(caption.text)}
           onPressOut={handleRelease}
-          onPress={() => handleTap(caption.id)}
+          onPress={() => {
+            handleTap(caption.id); 
+            handleFavorite(caption.id);
+          }}
         >
           <View style={styles.imageContainer}>
             <Image

@@ -7,12 +7,24 @@ import Favorites from './holbegram/src/favorites';
 import Profile from './holbegram/src/profile';
 import Search from './holbegram/src/search';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './holbegram/lib/firebaseConfig';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
   return(
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
+      <Stack.Navigator initialRouteName={user ? 'Home' : 'Login'}>
         <Stack.Screen
         name='Login'
         component={Login}
@@ -32,16 +44,18 @@ export default function App() {
         />
 
         <Stack.Screen 
-          name='Home' 
-          component={Home} 
+          name='Home'  
           options={{ headerShown: false }}
-        />
+        >
+          {() => <Home user={user} />}
+        </Stack.Screen>
 
         <Stack.Screen 
           name='Favorites' 
-          component={Favorites} 
           options={{ headerShown: false }}
-        />
+        >
+          {() => <Favorites user={user} />}
+        </Stack.Screen>
 
         <Stack.Screen 
           name='Profile' 

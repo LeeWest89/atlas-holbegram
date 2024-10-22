@@ -5,25 +5,25 @@ import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { FavoritesScreenNavigationProp } from '../../types';
 import { handleLogoutPress } from "./util";
-import { completedCaptions } from "../lib/firestore";
+import { addFavorite, completedCaptions } from "../lib/firestore";
 
 export default function Favorites({ user }) {
   const navigation = useNavigation<FavoritesScreenNavigationProp>();
-  const [captions, setCaptions] = useState([]);
+  const [captions, setCaptions] = useState<any[]>([]);
   const [activeCaption, setActiveCaption] = useState<string | null>(null);
 
   useEffect(() => {
     const userId = user?.uid;
-
+  
     if (!userId) {
-      console.error("User ID is undefined. Unable to fetch favorites.");
+      console.error("User ID is undefined");
       return;
     }
-
+  
     const unsubscribe = completedCaptions(userId, (data) => {
       setCaptions(data);
     });
-
+  
     return () => unsubscribe();
   }, [user]);
 
@@ -34,6 +34,7 @@ export default function Favorites({ user }) {
   const handleRelease = () => {
     setActiveCaption(null);
   };
+
 
   return (
     <View style={styles.container}>
@@ -48,13 +49,18 @@ export default function Favorites({ user }) {
         {captions.map((caption) => (
           <Pressable
             key={caption.id}
-            onLongPress={() => handleLongPress(caption.text)}
+            onLongPress={() => {
+              handleLongPress(caption.text);
+          }}
             onPressOut={handleRelease}
           >
             <View style={styles.imageContainer}>
               <Image
                 source={{ uri: caption.imageUrl }}
                 style={styles.imageContainer}
+                onError={() => {
+                  console.error("Image loading failed.");
+                }} // Handle image loading errors
               />
               {activeCaption === caption.text && (
                 <View style={styles.captionOverlay}>
