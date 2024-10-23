@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Colors } from '../src/Colors'; // Make sure to import Colors if you want to use it
+import { Colors } from '../src/Colors';
 
 export const PlusIcon = ({ color }) => {
   return (
